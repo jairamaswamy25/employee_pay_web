@@ -27,6 +27,15 @@ async componentDidMount(){
   this.getEmployeess()
 }
 
+generatePayroll = async (event) => {
+    window.location.href="/payrolls/" + this.state.employee_selected 
+};
+  generateOldPayroll = async (event) => {
+    event.preventDefault();
+   // const old_payroll_report = await (await Payroll_Services.generateEmployeeOldPayroll(this.state.employee_selected)).json()
+    window.location.href="/payrolls/old/" + this.state.employee_selected 
+    
+  }
 
 renderTableHeader = () => {
     const headers_list=["select","_id", "employee_first_name", "employee_last_name", "Edit/Delete"]
@@ -45,7 +54,7 @@ renderTableRows = () => {
                 type="radio"
                 name="radioButton"
                 value={val._id}
-                checked={this.state.employee_selected==val._id}
+                checked={this.state.employee_selected===val._id}
                 onChange={this.onEmployeeChanged}
               />
             </td>
@@ -81,14 +90,14 @@ render() {
   return employee_details.length>0 ?(
     <div>
 <div className = "row">
-<Link className="d-grid gap-2" to='/schedules/add'>
-<button className="btn btn-primary"> Generate Employee Payroll</button>
+{/* <Link className="d-grid gap-2" to='/payrolls'> */}
+<button className="btn btn-primary" onClick={this.generatePayroll}> Generate Employee Payroll </button>
                  
- </Link> 
- <Link className="d-grid gap-2" to='/schedules/add'>
-<button className="btn btn-primary"> Generate Employee old Payroll</button>
+ {/* </Link>  */}
+ {/* <Link className="d-grid gap-2" to='/payrolls/old/:id'> */}
+<button className="btn btn-primary" onClick={this.generateOldPayroll}> Generate Employee old Payroll</button>
                  
- </Link> 
+ {/* </Link>  */}
                    </div>
   <table className='schedules' >
     <thead><tr>{this.renderTableHeader()}</tr></thead>

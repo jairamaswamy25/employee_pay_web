@@ -35,15 +35,9 @@ class add_schedule extends Component{
   handleAddFormSubmit = async (event) => {
     event.preventDefault();
    
-    // const start_time = new Date(new Date(this.state.schedule_start_time).toString().split('GMT')[0]+' UTC').toISOString()
-    // const end_time = new Date(new Date(this.state.schedule_end_time).toString().split('GMT')[0]+' UTC').toISOString()
     const start_time = moment(new Date(this.state.schedule_start_time)).format("yyyy-MM-DDTHH:mm:ss.SSS").toString()
     const end_time = moment(new Date(this.state.schedule_end_time)).format("yyyy-MM-DDTHH:mm:ss.SSS").toString()
     const employee_id = this.state.employee_selected
-    // var input_body = new FormData();
-    // input_body.append('start_time', start_time);
-    // input_body.append('end_time',end_time)
-    // input_body.append('_id', employee_id)
 
     const input_body =  {
       "start_time":start_time,"end_time":end_time,"_id":employee_id
