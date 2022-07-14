@@ -8,25 +8,23 @@ class payrolls extends Component{
     super(props)
     this.state = {
         payroll_details:[],
+        payroll:[],
+        schedules_paid:[],
         employee_selected: "",
         is_loading:false,
         is_error:false
     }
     Payroll_Services.generateEmployeePayroll.bind(this)
 }
-async generateEmployeePayrollss(id){
+ async generateEmployeePayrollss(id){
   var payrolls = await (await Payroll_Services.generateEmployeePayroll(id)).json()
-  console.log(payrolls)
   this.is_loading = false;
   this.is_error=false;
-  if(payrolls)
-  {
-    this.setState({payroll_details:payrolls, is_loading:false});
-  }
+  this.setState({payroll_details:payrolls, payroll:payrolls.payroll, schedules_paid:payrolls.payroll.schedules_paid, is_loading:false});
   
 }
 
-async componentDidMount(){
+async componentWillMount(){
     const url = window.location.href
     const id = url.substring(url.lastIndexOf('/') + 1)
     this.generateEmployeePayrollss(id)
@@ -39,27 +37,43 @@ renderTableHeader = () => {
     const headers_list=["Employee ID","Employee Name", "Total Salary", "tax", "Take Home", "Status", "Schedules"]
     return headers_list.map(header => <th key={header}>{header}</th>)
 }
-onEmployeeChanged = (event, itemRows) => {
-    this.setState({employee_selected:event.target.value})
-   
-  }
+
+// renderPayroll=(pay)=>{
+
+//   Object.entries(pay)
+// }
 renderTableRows = () => {
   const val = this.state.payroll_details;
-
+  const pay = this.state.payroll;
+  const schedules_paid = this.state.schedules_paid;
+  console.log(val)
+  console.log(pay);
+  //console.log(payroll["total_salary"]);
+  //console.log(val._id);
   return ((<tr key={val._id}>
    
     <td>{val._id}</td>
     <td>{val.employee_first_name+ " " +val.employee_last_name}</td>
-    <td>{val.payroll.total_salary}</td>
-    <td>{val.payroll.tax}</td>
-    <td>{val.payroll.take_home}</td>
-    <td>{"Paid"}</td>
+    
+    {/* <td>
+    {val.payroll.map((pay)=>(
+           pay.total_salary
+        ))}
+    </td> */}
+   
+
+    {/* <td>{val.payroll.map(e=>e.Value)}</td> */}
+    <td>{pay.total_salary}</td>
+    <td>{pay.tax}</td>
+    <td>{pay.take_home}</td>
     <td>
-    {val.payroll.schedules_paid.map((sch)=>(
+    {schedules_paid.map((sch)=>(
            sch.start_time+"-"+sch.end_time + "\n"
         ))}
 
     </td>
+    <td>{"Paid"}</td>
+    
     </tr>
 ))
     
@@ -91,7 +105,7 @@ render() {
   if (is_error){
       return <div>error...</div>
   }
-  return payroll_details.length>0 ?(
+  return payroll_details ?(
     <div>
 <div className = "row">
                 </div>
@@ -101,7 +115,7 @@ render() {
   </table> 
     </div>
        
-  ): (<div>no users {this.state.payroll_details.length}</div>)
+  ): (<div>no payroll generated</div>)
  
   }
   

@@ -4,7 +4,9 @@ class employee_services {
     
     async generateEmployeePayroll(id){
         console.log(id)
-      return fetch(payroll_api_url+ "/" + id);
+        //const payroll = await (await fetch(payroll_api_url+ "/" + id)).json();
+        //const payroll_json = await payroll.json();
+        return fetch(payroll_api_url+ "/" + id);
     // return fetch(payroll_api_url+ "/" + id, {
     //     method: 'post',
     //     //mode: 'no-cors',        
